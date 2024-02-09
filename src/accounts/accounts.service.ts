@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './schemas/account.schema';
@@ -11,14 +11,28 @@ export class AccountsService {
     @InjectModel(Account.name) private accountModel: Model<Account>,
   ) {}
   async create(createAccountDto: CreateAccountDto) {
-    try {
-      const datos = await this.accountModel.create(createAccountDto);
-      return datos;
-    } catch (error) {
-      console.log(error);
+    const { accountEmail } = createAccountDto;
+    const existingAccount = await this.accountModel.findOne({ accountEmail });
+
+    if (existingAccount) {
+      throw new HttpException(
+        'The account already exists',
+        HttpStatus.CONFLICT,
+      );
     }
 
-    // return 'This action adds a new account';
+    try {
+      const newAccount = await this.accountModel.create(createAccountDto);
+      return newAccount;
+    } catch (error) {
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: new Error(error.message),
+        },
+      );
+    }
   }
 
   findAll() {

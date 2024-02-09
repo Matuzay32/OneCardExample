@@ -1,6 +1,35 @@
-import { IsEmail } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsDate,
+  IsOptional,
+  IsDateString,
+} from 'class-validator';
 
 export class CreateAccountDto {
+  @IsNumber()
+  @IsNotEmpty()
+  catalogId: number;
+
   @IsEmail()
-  username: string;
+  @IsNotEmpty()
+  accountEmail: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  accountName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  accountPhoneNumber: string;
+
+  @IsDateString() // Validará si la cadena es una fecha válida
+  @IsNotEmpty()
+  accountBirthday: Date;
 }
