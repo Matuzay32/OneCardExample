@@ -10,8 +10,15 @@ export class AccountsService {
   constructor(
     @InjectModel(Account.name) private accountModel: Model<Account>,
   ) {}
-  create(createAccountDto: CreateAccountDto) {
-    return 'This action adds a new account';
+  async create(createAccountDto: CreateAccountDto) {
+    try {
+      const datos = await this.accountModel.create(createAccountDto);
+      return datos;
+    } catch (error) {
+      console.log(error);
+    }
+
+    // return 'This action adds a new account';
   }
 
   findAll() {
