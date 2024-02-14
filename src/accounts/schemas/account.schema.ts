@@ -13,13 +13,13 @@ export class Account {
   accountName: string;
   @Prop({ required: true })
   accountPhoneNumber: string;
-  @Prop({ required: true })
+  @Prop({ required: true, type: '' })
   accountBirthday: Date;
   @Prop({ required: true, default: 'A' })
   accountStatus: string;
-  @Prop({ required: false })
+  @Prop({ required: false, default: Date.now() })
   createdAt: Date;
-  @Prop({ required: false })
+  @Prop({ required: false, default: Date.now() })
   updatedAt: Date;
 }
 
